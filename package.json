@@ -1,0 +1,24 @@
+{
+  "name": "grafos-atv1",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ana Gabriela",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --exit-child src/main/server.ts",
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "start": "node dist/main/server.js"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "eslint": "^8.57.0",
+    "prettier": "3.2.5",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
