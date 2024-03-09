@@ -14,33 +14,34 @@ class Graph {
   }
 
   adicionarArco(pai, filho) {
-    const noPai = this.adicionarVertice(pai)
-    const noFilho = this.adicionarVertice(filho)
+    const noPai = this.adicionarVertice(pai, pai)
+    const noFilho = this.adicionarVertice(filho, filho)
     noPai?.insereAdjacencia(noFilho)
-    noFilho?.insereAdjacencia(noPai)
 
     return [noPai, noFilho]
   }
 
-  adicionarVertice(acao): Vertice | undefined {
-    if (this.nos.has(acao)) {
-      return this.nos.get(acao)
+  adicionarVertice(acao, id): Vertice | undefined {
+    if (this.nos.has(id)) {
+      return this.nos.get(id)
     }
 
-    const vertice = new Vertice(acao)
-    this.nos.set(acao, vertice)
-    
+    const vertice = new Vertice(acao, id)
+    this.nos.set(id, vertice)
+
     return vertice
   }
 
-  removerVertice(acao) {
-    const atual = this.nos.get(acao)
+  removerVertice(id) {
+    const atual = this.nos.get(id)
     if (atual) {
       for (const no of this.nos.values()) {
         no.removeAdjacency(atual)
       }
     }
 
-    return this.nos.delete(acao)
+    return this.nos.delete(id)
   }
 }
+
+export { Graph }

@@ -6,7 +6,6 @@ const treeRouter = Router()
 
 treeRouter.get('/', async (req: Request, res: Response) => {
   await treeController.getTree()
-
   return res.send('Hello, World!')
 })
 

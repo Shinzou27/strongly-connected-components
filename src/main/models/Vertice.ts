@@ -1,5 +1,27 @@
+import { randomUUID } from 'crypto'
+
+interface Verticerequest {
+  id?: string
+  adjacencies?: Vertice[]
+  acao: string
+}
+
 class Vertice {
+  private _id: string
+  private adjacencies?: Vertice[]
   private _acao: string
+
+  constructor(props: Verticerequest) {
+    let id = props.id
+    this._id = id ?? randomUUID()
+    this.adjacencies = props.adjacencies
+    this._acao = props.acao
+  }
+
+  public get id(): string {
+    return this._id
+  }
+
   public get acao(): string {
     return this._acao
   }
@@ -7,25 +29,20 @@ class Vertice {
     this._acao = v
   }
 
-  private adjacencies: Vertice[]
-  public get adjacencia(): Vertice[] {
-    return this.adjacencies
+  public get adjacencia(): Vertice[] | undefined {
+    return this.adjacencies ?? undefined
   }
+
   public set adjacencia(v: Vertice[]) {
     this.adjacencies = v
   }
 
-  constructor(acao: string) {
-    this.acao = acao
-    this.adjacencia = []
-  }
-
   insereAdjacencia(vertice) {
-    this.adjacencia.push(vertice)
+    this.adjacencies?.push(vertice)
   }
 
   removeAdjacency(vertex) {
-    this.adjacencies.filter((v) => v !== vertex)
+    this.adjacencies = this.adjacencies?.filter((v) => v !== vertex)
   }
 }
 
