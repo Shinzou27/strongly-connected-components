@@ -8,30 +8,23 @@ class Graph {
   public set nos(v: Map<string, Vertice>) {
     this._nos = v
   }
-
   constructor() {
     this._nos = new Map()
   }
-
   adicionarArco(pai, filho) {
     const noPai = this.adicionarVertice(pai, pai)
     const noFilho = this.adicionarVertice(filho, filho)
     noPai?.insereAdjacencia(noFilho)
-
     return [noPai, noFilho]
   }
-
   adicionarVertice(acao, id): Vertice | undefined {
     if (this.nos.has(id)) {
       return this.nos.get(id)
     }
-
-    const vertice = new Vertice(acao, id)
+    const vertice = new Vertice(acao)
     this.nos.set(id, vertice)
-
     return vertice
   }
-
   removerVertice(id) {
     const atual = this.nos.get(id)
     if (atual) {
