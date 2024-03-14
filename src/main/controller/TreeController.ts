@@ -1,13 +1,9 @@
-import { TreeService } from '../../app/TreeService'
+import { Request, Response } from 'express'
+import { treeService } from '../factories/makeTreeService'
 
 export class TreeController {
-  private treeService: TreeService
 
-  constructor(treeService: TreeService) {
-    this.treeService = treeService
-  }
-
-  async createTree(): Promise<void> {
+  async createTree(req: Request, res: Response): Promise<Response> {
     // exemplo do fluxo 
     const vertexTree = [
       'Pegar Senha', 
@@ -68,16 +64,33 @@ export class TreeController {
     //   [10, 12]
     // ]
 
-    const tree = this.treeService.createGraph(vertexTree)
+    const tree = treeService.createGraph(vertexTree)
 
-    this.treeService.addAdjacencies(tree, adjacencies)
+    treeService.addAdjacencies(tree, adjacencies)
     tree.DFS()
   
       let final = new Map()
       for(let j = 0; j < tree.vertexes.length; j++){
           final.set(j, tree.vertexes[j])
       }
-      console.log("black:")
-      console.log(final)
+      const finalToJson = Array.from(final).map(([key, value]) => {
+        return {
+          value: value.value,
+          initialTime: value.initialTime,
+          finalTime: value.finalTime,
+          color: value.color,
+          parent: value.parent?.value,
+          adjacencies: value.adjacencies.map((v: any) => v.value)
+        } as {
+          value: string,
+          initialTime: number,
+          finalTime: number,
+          color: string,
+          parent?: string,
+          adjacencies: string[]
+        }
+      })
+      
+      return res.json(finalToJson)
   }
 }

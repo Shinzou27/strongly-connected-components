@@ -1,5 +1,5 @@
 import { TreeService } from '../../app/TreeService'
 
-const createTreeService = new TreeService()
+ const treeService = new TreeService()
 
-export { createTreeService }
+export { treeService }
