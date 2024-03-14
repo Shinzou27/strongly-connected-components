@@ -8,7 +8,7 @@ class Vertex {
 
   constructor(value: string) {
     this._value = value
-    this._color = 'branco'
+    this._color = ''
     this._initialTime = 0
     this._finalTime = 0
     this._adjacencies = []
