@@ -6,69 +6,51 @@ export class TreeController {
   async createTree(req: Request, res: Response): Promise<Response> {
     // exemplo do fluxo 
     const vertexTree = [
-      'Pegar Senha', 
-      'Triagem', 
-      'Cadastro', 
-      'Fila de espera', 
-      'Avaliação Médica', 
-      'Exames', 
-      'Cirurgia', 
-      'Internação', 
-      'Alta'
+      /*
+      'A', 'B', 'C', 'D', 'E', 'F', 'G',
+      */
+      'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
     ]
     
     let adjacencies: [number, number][] = [
+      /*
+      [0, 2],
+      [0, 3],
+      [0, 4],
+      [1, 4],
+      [2, 5],
+      [2, 6],
+      [3, 1],
+      [3, 2],
+      [3, 4],
+      [4, 6],
+      [5, 3],
+      [5, 6],
+       */
       [0, 1],
       [1, 2],
+      [1, 4],
+      [1, 5],
       [2, 3],
-      [3, 4],
+      [2, 6],
+      [3, 2],
+      [3, 7],
+      [4, 0],
       [4, 5],
-      [5, 4],
       [5, 6],
-      [6, 4],
+      [6, 5],
       [6, 7],
-      [0, 6],
-      [7, 8]
+      [7, 7],
     ]
-    
-    //anamnese 
-    // const vertexTree = [
-    //   'Sintomas respiratórios',
-    //   'Febre Alta', 
-    //   'Tosse produtiva', 
-    //   'Suspeita de gripe', 
-    //   'Coriza', 
-    //   'Suspeita de resfriado', 
-    //   'Suspeita de pneumonia', 
-    //   'Sintomas de pele',
-    //   'Exposição a alergenos conhecidos',
-    //   'Suspeita de alergia de contato',
-    //   'Histórico de alergias na família',
-    //   'Suspeita de eczema',
-    //   'Suspeita de infecção da pele',
-    //   'Próxima pergunta'
-    // ]
-    
-    // let adjacencies: [number, number][] = [
-    //   [0, 1],
-    //   [1, 2],
-    //   [2, 3], 
-    //   [1, 4],
-    //   [4, 5],
-    //   [4, 13],
-    //   [0, 7],
-    //   [7, 8],
-    //   [8, 9],
-    //   [8, 10],
-    //   [10, 11],
-    //   [10, 12]
-    // ]
-
     const tree = treeService.createGraph(vertexTree)
-
     treeService.addAdjacencies(tree, adjacencies)
     tree.DFS()
-  
+
+    const treeTranspose = treeService.createGraph(vertexTree);
+    treeService.addAdjacencies(treeTranspose, adjacencies.map((adjacency) => [adjacency[1], adjacency[0]]))
+    treeTranspose.changeOrder(tree.getOrderAsArray());
+    treeTranspose.DFS()
+
       let final = new Map()
       for(let j = 0; j < tree.vertexes.length; j++){
           final.set(j, tree.vertexes[j])

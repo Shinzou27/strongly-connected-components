@@ -7,6 +7,8 @@ class Graph {
   private edges: number 
   private edgesCruzadas: number
   private edgesDiretas: number
+  private order: string
+  private clusters: Vertex[][]
 
   constructor() {
     this.vertex = []
@@ -15,12 +17,21 @@ class Graph {
     this.edges = 0
     this.edgesCruzadas = 0
     this.edgesDiretas = 0
+    this.order = ''
+    this.clusters = []
   }
 
   get vertexes(): Vertex[] {
     return this.vertex
   }
-
+  getOrderAsArray(): string[] {
+    return this.order.split("-");
+  }
+  findVertexByValue(value: string): Vertex | undefined {
+    for (let vertex of this.vertex) {
+      if (vertex.value === value) return vertex
+    }
+  }
   addVertex(action: string): Vertex | undefined {
     for (let vertex of this.vertex) {
       if (vertex.value === action) return vertex
@@ -31,7 +42,15 @@ class Graph {
 
     return newVertex
   }
-
+  changeOrder(order: string[]): void {
+    const newVertexOrder: Vertex[] = [];
+    order.forEach((value) => {
+      const vertexToAdd = this.findVertexByValue(value);
+      newVertexOrder.push(vertexToAdd as Vertex);
+    })
+    
+    this.vertex = newVertexOrder;
+  }
   DFS() {
     for (let vertex of this.vertex) {
       vertex.color = 'branco'
@@ -39,13 +58,24 @@ class Graph {
 
     for (let vertex of this.vertex) {
       if (vertex.color == 'branco') {
+        if (this.clusters[this.clusters.length - 1]?.length > 0 || this.clusters.length == 0) {
+          this.clusters.push([])
+        }
         this.DFSvisit(vertex)
+        console.log(this.clusters[this.clusters.length - 1]?.length > 0, this.clusters.length == 0);
       }
     }
     console.log('Há ' + this.cycles + ' ciclos no grafo!')
     console.log("Há " + this.edges + " arestas de árvore no grafo")
     console.log("Há " + this.edgesDiretas + " arestas diretas no grafo")
     console.log("Há " + this.edgesCruzadas + " arestas cruzadas no grafo")
+    console.log("Ordem: " + this.order)
+    for (let vertex of this.vertex) {
+      console.log(`Vértice: ${vertex.value} | ${vertex.initialTime}/${vertex.finalTime}`);
+    }
+    for (let cluster of this.clusters) {
+      console.log("Cluster: " + cluster.map((vertex) => vertex.value).join("="));
+    }
   }
 
   DFSvisit(vertex: Vertex) {
@@ -70,6 +100,8 @@ class Graph {
       }
     }
     vertex.color = 'preto'
+    this.clusters[this.clusters.length-1].push(vertex)
+    this.order = this.order == '' ? vertex.value : vertex.value + "-" + this.order
     this.time = this.time + 1
     vertex.finalTime = this.time 
   }
