@@ -6,14 +6,13 @@ export class TreeController {
   async createTree(req: Request, res: Response): Promise<Response> {
     // exemplo do fluxo 
     const vertexTree = [
-      /*
       'A', 'B', 'C', 'D', 'E', 'F', 'G',
-      */
+      /*
       'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+      */
     ]
     
     let adjacencies: [number, number][] = [
-      /*
       [0, 2],
       [0, 3],
       [0, 4],
@@ -26,7 +25,8 @@ export class TreeController {
       [4, 6],
       [5, 3],
       [5, 6],
-       */
+      [6, 1]
+      /*
       [0, 1],
       [1, 2],
       [1, 4],
@@ -41,6 +41,7 @@ export class TreeController {
       [6, 5],
       [6, 7],
       [7, 7],
+      */
     ]
     const tree = treeService.createGraph(vertexTree)
     treeService.addAdjacencies(tree, adjacencies)
@@ -72,6 +73,11 @@ export class TreeController {
           adjacencies: string[]
         }
       })
+      
+      tree.clusters = treeTranspose.clusters
+      tree.vertexes.forEach(v => {
+        tree.recommendations(v);
+      });
       
       return res.json(finalToJson)
   }

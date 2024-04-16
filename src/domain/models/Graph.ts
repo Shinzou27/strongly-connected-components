@@ -8,7 +8,7 @@ class Graph {
   private edgesCruzadas: number
   private edgesDiretas: number
   private order: string
-  private clusters: Vertex[][]
+  public clusters: Vertex[][]
 
   constructor() {
     this.vertex = []
@@ -62,7 +62,6 @@ class Graph {
           this.clusters.push([])
         }
         this.DFSvisit(vertex)
-        console.log(this.clusters[this.clusters.length - 1]?.length > 0, this.clusters.length == 0);
       }
     }
     console.log('Há ' + this.cycles + ' ciclos no grafo!')
@@ -105,6 +104,33 @@ class Graph {
     this.time = this.time + 1
     vertex.finalTime = this.time 
   }
+
+  recommendations(vertex: Vertex){
+    let desiredCluster : Vertex[] = []
+    
+    for(let clst of this.clusters){
+      //console.log(clst.map((vertex) => vertex.value));
+      
+      if(clst.map((vertex) => vertex.value).includes(vertex.value)){
+        //console.log(clst);
+        desiredCluster = clst
+        break
+      }
+    }
+    
+    let recs : string[] = []
+    for(let element of desiredCluster){
+      if(!vertex.adjacencies.map((vertex) => vertex.value).includes(element.value) && element.value !== vertex.value){
+        recs.push(element.value)
+      }
+    }
+    const toPrintLabel: string = recs.length > 0 ? `${vertex.value} pode receber recomendações referentes a: ${recs.join(', ')}` : `${vertex.value} não possui recomendações de perfis a seguir.`
+    console.log(toPrintLabel);
+    
+    
+    return recs
+  }
+  
 }
 
 export { Graph }
